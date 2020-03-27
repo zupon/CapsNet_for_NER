@@ -26,7 +26,8 @@ def archive_line_iter(archive_path, inner_path):
 
 def parse_glove_file(archive_path, ndim):
     # File path inside archive
-    inner_path = "glove.6B.{:d}d.txt".format(ndim)
+    # inner_path = "glove.6B.{:d}d.txt".format(ndim)
+    inner_path = "wiki.es.vec".format(ndim)
     print("Parsing file: {:s}:{:s}".format(archive_path, inner_path))
     # Count lines to pre-allocate memory
     line_count = 0
@@ -55,12 +56,13 @@ class Hands(object):
     
     _AVAILABLE_DIMS = { 50, 100, 200, 300 }
 
-    def __init__(self, ndim=50):
+    def __init__(self, ndim=300):
         assert(ndim in self._AVAILABLE_DIMS)
 
         self.vocab = None
         self.W = None
-        self.zipped_filename = "data/glove/glove.6B.zip"
+        # self.zipped_filename = "data/glove/glove.6B.zip"
+        self.zipped_filename = "data/es/wiki.es.zip"
 
         # Download datasets
         if not os.path.isfile(self.zipped_filename):
