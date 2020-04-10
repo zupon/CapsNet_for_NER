@@ -246,13 +246,13 @@ class conll2003Data(object):
                     sentence = []
                 continue
             
-            # input format is [ word, pos tag, chunk tag, ner tag]
-            # we are ignoring the chunk tag
+            # input format is [ word, pos tag, chunk tag, features tag]
+            # we are ignoring the chunk tag, we swap pos and features to learn pos tags
             splits = line.strip().split(' ')
             if canonicalize:
-                word = [utils.canonicalize_word(splits[0]), splits[1], splits[3], self.capitalizaion(splits[0])]
+                word = [utils.canonicalize_word(splits[0]), splits[3], splits[1], self.capitalizaion(splits[0])]
             else:
-                word = [splits[0], splits[1], splits[3], self.capitalizaion(splits[0])]
+                word = [splits[0], splits[3], splits[1], self.capitalizaion(splits[0])]
             sentence.append( word)
         
         # don't forget the last sentence
