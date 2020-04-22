@@ -24,10 +24,11 @@ def archive_line_iter(archive_path, inner_path):
             for line in fd:
                 yield line
 
-def parse_glove_file(archive_path, ndim):
+def parse_glove_file(archive_path, ndim, vector_path):
     # File path inside archive
     # inner_path = "glove.6B.{:d}d.txt".format(ndim)
-    inner_path = "wiki.es.vec".format(ndim)
+    inner_path = vector_path.format(ndim)
+
     print("Parsing file: {:s}:{:s}".format(archive_path, inner_path))
     # Count lines to pre-allocate memory
     line_count = 0
@@ -56,13 +57,13 @@ class Hands(object):
     
     _AVAILABLE_DIMS = { 50, 100, 200, 300 }
 
-    def __init__(self, ndim=300):
+    def __init__(self, vector_zip, ndim=300):
         assert(ndim in self._AVAILABLE_DIMS)
 
         self.vocab = None
         self.W = None
         # self.zipped_filename = "data/glove/glove.6B.zip"
-        self.zipped_filename = "data/es/wiki.es.zip"
+        self.zipped_filename = vector_zip
 
         # Download datasets
         if not os.path.isfile(self.zipped_filename):
@@ -71,7 +72,10 @@ class Hands(object):
             self.zipped_filename = download_glove(data_dir)
         print("Loading vectors from {:s}".format(self.zipped_filename))
 
-        words, W = parse_glove_file(self.zipped_filename, ndim)
+        # AZ: Get the actual .vec file inside the archive. Yes it's dumb.
+        vec_filename = self.zipped_filename.split("/")[-1][:-4]+".vec"
+
+        words, W = parse_glove_file(self.zipped_filename, ndim, vec_filename)
         # Set nonzero value for special tokens
         mean_vec = np.mean(W[3:], axis=0)
         for i in range(3):
