@@ -309,11 +309,13 @@ class conll2003Data(object):
         # remember these vocabs will have the <s>, </s>, and <unk> tags in there
         # sizes need to be interpreted "-3" - consider replacing...
         self.vocab = vocabulary.Vocabulary( flatData[0], size=vocabSize)
-        self.posTags = vocabulary.Vocabulary( flatData[1])
+        self.posTags = vocabulary.Vocabulary( "|".join(flatData[1]).split("|"))
         self.nerTags = vocabulary.Vocabulary( flatData[2])
         self.capitalTags = vocabulary.Vocabulary(flatData[3])
 
         if verbose:
+            # print ("AZ TEST")
+            # print (type(self.posTags))
             print ("vocabulary for words, posTags, nerTags built and stored in object")
             print ("vocab size =", vocabSize)
             print ("10 sampled words from vocabulary\n", list(self.vocab.wordset)[:10], "\n")
@@ -358,8 +360,27 @@ class conll2003Data(object):
         # parse through, pad each sentence with pads open and close tags, then convert to IDs
         vocabIDs = [ self.vocab.words_to_ids( ["<s>"] * pads + [word[0] for word in sent] + ["</s>"] * pads) \
                      for sent in sentences]
-        posIDs = [ self.posTags.words_to_ids( ["<s>"] * pads + [word[1] for word in sent] + ["</s>"] * pads) \
-                   for sent in sentences]
+        # posIDs = [ self.posTags.words_to_ids( ["<s>"] * pads) + self.posTags.words_to_ids([word[1] for word in sent]) + self.posTags.words_to_ids(["</s>"] * pads) \
+                   # for sent in sentences]
+
+        posIDs = []
+        for sent in sentences:
+            padsStart = self.posTags.words_to_ids(["<s>"] * pads)
+            padsEnd = self.posTags.words_to_ids(["</s>"] * pads)
+            padsStartList = []
+            for item in padsStart:
+                padsStartList.append([item])
+            padsEndList = []
+            for item in padsEnd:
+                padsEndList.append([item])
+            sentFeats = []
+            for word in sent:
+                wordFeats = word[1].split("|")
+                wordFeats = self.posTags.words_to_ids(wordFeats)
+                sentFeats.append(wordFeats)
+            combined = padsStartList + sentFeats + padsEndList
+            posIDs.append(combined)
+
         capitalIDs = [self.capitalTags.words_to_ids(["<s>"]*pads + [word[3] for word in sent] + ["</s>"]*pads) \
                      for sent in sentences]
         nerIDs = [ self.nerTags.words_to_ids( ["<s>"] * pads + [word[2] for word in sent] + ["</s>"] * pads) \
@@ -370,6 +391,9 @@ class conll2003Data(object):
             print ("all sentences padded with {} pads to either end".format(pads))
             print ("vocab idx for first 5 sentences:\n", vocabIDs[:5], "\n")
             print ("pos idx for first 5 sentences:\n", posIDs[:5], "\n")
+            print ("AZ TEST", "\n")
+            print ("posIDs[0]:\t", posIDs[0], "\n")
+            print ("posIDs len:\t", len(posIDs), "\n")
             print ("ner idx for first 5 sentences:\n", nerIDs[:5], "\n")
             print ("capitalization idx for first 5 sentences: \n", capitalIDs[:5], "\n")
             print ("number of sentences = {}".format(len(vocabIDs)), "\n")
@@ -402,7 +426,8 @@ class conll2003Data(object):
                 print (self.vocab.ids_to_words(featsVocab[i]))
                 print ("PoS tags for window {}".format(i))
                 print (featsPOS[i])
-                print (self.posTags.ids_to_words(featsPOS[i]))
+                # print (self.posTags.ids_to_words(featsPOS[i]))
+                print (self.posTags.ids_to_feats(featsPOS[i]))
                 print ("Capitalization tags for window {}".format(i))
                 print (featsCAPITAL[i])
                 print (self.capitalTags.ids_to_words(featsCAPITAL[i]))

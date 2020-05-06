@@ -70,6 +70,16 @@ class Vocabulary(object):
     def ids_to_words(self, ids):
         return [self.id_to_word[i] for i in ids]
 
+    def ids_to_feats(self, ids):
+        returnedList = []
+        for i in ids:
+            wordFeats = []
+            for item in i:
+                wordFeats.append(self.id_to_word[item])
+            returnedList.append(wordFeats)
+        return returnedList
+        # return [self.id_to_word[i] for i in ids]
+
     def pad_sentence(self, words, use_eos=True):
         ret = [self.START_TOKEN] + words
         if use_eos:
