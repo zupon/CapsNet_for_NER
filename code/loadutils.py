@@ -250,9 +250,9 @@ class conll2003Data(object):
             # we are ignoring the chunk tag
             splits = line.strip().split(' ')
             if canonicalize:
-                word = [utils.canonicalize_word(splits[0]), splits[1], splits[3], self.capitalizaion(splits[0])]
+                word = [utils.canonicalize_word(splits[0]), splits[2], splits[3], self.capitalizaion(splits[0])]
             else:
-                word = [splits[0], splits[1], splits[3], self.capitalizaion(splits[0])]
+                word = [splits[0], splits[2], splits[3], self.capitalizaion(splits[0])]
             sentence.append( word)
         
         # don't forget the last sentence

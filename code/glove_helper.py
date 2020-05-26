@@ -73,6 +73,7 @@ class Hands(object):
         print("Loading vectors from {:s}".format(self.zipped_filename))
 
         # AZ: Get the actual .vec file inside the archive. Yes it's dumb.
+        #vec_filename = self.zipped_filename.split("/")[-1][:-4]+".vec"
         vec_filename = self.zipped_filename.split("/")[-1][:-4]+".vec"
 
         words, W = parse_glove_file(self.zipped_filename, ndim, vec_filename)
