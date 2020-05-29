@@ -120,7 +120,7 @@ def loadProcessedData(saveDirectory):
     trainX_capitals_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX_capitals']))
     trainX_pos_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX_pos']))
     devX = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX']))
-    devX_capitals_cat = np.load(os.path.join(DIRECTORY,['devX_capitals']))
+    devX_capitals_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX_capitals']))
     devX_pos_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX_pos']))
     trainY_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainY']))
     devY_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devY']))
