@@ -455,8 +455,7 @@ hyper_param_cnn = {
 saveDirectory = "savedProcessedData_"+LANGUAGE+"_"+TRAIN_AMOUNT+"_"+random_seed
 
 # save all loaded data for use by training process
-saveProcessedData( trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat,
-                   devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY, saveDirectory)
+saveProcessedData( trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat, devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY, saveDirectory)
 
 
 # ## Model Training Functions
@@ -475,9 +474,10 @@ def trainModelSP( testFunc, modelName, hyper_params, embed_matrix=None, verbose=
     with open(HYPER_PARAM_FILE, mode='w') as fp:
         json.dump( hyper_params, fp)
     
+    # saveDirectory = "savedProcessedData_"+LANGUAGE+"_"+TRAIN_AMOUNT+"_"+random_seed
     # call the train function
     # consider replacing with a call to subprocess!!
-    get_ipython().system('python {testFunc} {modelName} {HYPER_PARAM_FILE}')
+    get_ipython().system('python {testFunc} {modelName} {HYPER_PARAM_FILE} {saveDirectory}')
 
 
 # In[30]:

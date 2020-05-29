@@ -9,7 +9,7 @@ from capsulelayers import CapsuleLayer, PrimaryCap1D, Length, Mask
 from keras.models import model_from_json
 from common import vocabulary, utils
 
-DIRECTORY = "FIXME"
+DIRECTORY = "/home/u26/zupon/FIXME"
 
 # a dict of all processed data filenames
 TRAIN_DATA_FILES = { 'trainX' : DIRECTORY+'/trainX.npy',
