@@ -55,6 +55,7 @@ Pick how much of the training data to use
 TRAIN_AMOUNT = sys.argv[2]
 
 DIRECTORY = "../data/pos_tagging/"+LANGUAGE+"/"
+# DIRECTORY = sys.argv[4]
 
 #training file depends on low-resource or not; 100%, 50%, or 10% of training data used
 TRAIN_FILE = DIRECTORY+"train_"+TRAIN_AMOUNT+".txt"
@@ -64,6 +65,7 @@ DEV_FILE = DIRECTORY+"dev.txt"
 TEST_FILE = DIRECTORY+"test.txt"
 # VECTORS = "data/"+LANGUAGE+"/wiki."+LANGUAGE+".zip"
 VECTORS = "data/"+LANGUAGE+"/cc."+LANGUAGE+".300.zip"
+# VECTORS = sys.argv[5]
 
 # out files for IPC
 HYPER_PARAM_FILE = "hyper_params.json"
@@ -495,7 +497,7 @@ def testFeatures( testFunc, modelName, hyper_params):
     # try the embeddings with different features
     
     # base
-    curModel = modelName + "_" + LANGUAGE + "_" + TRAIN_AMOUNT + "_base"
+    curModel = modelName + "_" + LANGUAGE + "_" + TRAIN_AMOUNT + "_" + random_seed
     trainModelSP( testFunc, curModel, hypers )
     
     # pos tags
@@ -694,7 +696,6 @@ print("RANDOM SEED:\t", random_seed)
 
 print("Preprocessing Time")
 print("--- %s seconds ---" % (preprocessing_time))
-
 
 print("Training Time for capsnet glove nolearn")
 print("--- %s seconds ---" % (end_time_caps_1 - start_time_caps_1))
