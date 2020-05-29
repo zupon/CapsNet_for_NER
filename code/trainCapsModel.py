@@ -28,9 +28,11 @@ def main():
     
     with open(sys.argv[2]) as fp:
         hypers = json.load( fp)
+
+    DIRECTORY = sys.argv[3]
     
     trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat, \
-           devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY = loadProcessedData()
+           devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY = loadProcessedData(DIRECTORY)
     
     # contruct training dicts
     trainX_dict = {'x':trainX}

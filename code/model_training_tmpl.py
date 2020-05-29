@@ -54,8 +54,8 @@ Pick how much of the training data to use
 # TRAIN_AMOUNT = "10"
 TRAIN_AMOUNT = sys.argv[2]
 
-DIRECTORY = "../data/pos_tagging/"+LANGUAGE+"/"
-# DIRECTORY = sys.argv[4]
+# DIRECTORY = "../data/pos_tagging/"+LANGUAGE+"/"
+DIRECTORY = sys.argv[4]
 
 #training file depends on low-resource or not; 100%, 50%, or 10% of training data used
 TRAIN_FILE = DIRECTORY+"train_"+TRAIN_AMOUNT+".txt"
@@ -64,8 +64,8 @@ TRAIN_FILE = DIRECTORY+"train_"+TRAIN_AMOUNT+".txt"
 DEV_FILE = DIRECTORY+"dev.txt"
 TEST_FILE = DIRECTORY+"test.txt"
 # VECTORS = "data/"+LANGUAGE+"/wiki."+LANGUAGE+".zip"
-VECTORS = "data/"+LANGUAGE+"/cc."+LANGUAGE+".300.zip"
-# VECTORS = sys.argv[5]
+# VECTORS = "data/"+LANGUAGE+"/cc."+LANGUAGE+".300.zip"
+VECTORS = sys.argv[5]
 
 # out files for IPC
 HYPER_PARAM_FILE = "hyper_params.json"
@@ -452,10 +452,11 @@ hyper_param_cnn = {
 
 # In[28]:
 
+saveDirectory = "savedProcessedData_"+LANGUAGE+"_"+TRAIN_AMOUNT+"_"+random_seed
 
 # save all loaded data for use by training process
 saveProcessedData( trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat,
-                   devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY)
+                   devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY, saveDirectory)
 
 
 # ## Model Training Functions
@@ -497,7 +498,7 @@ def testFeatures( testFunc, modelName, hyper_params):
     # try the embeddings with different features
     
     # base
-    curModel = modelName + "_" + LANGUAGE + "_" + TRAIN_AMOUNT + "_" + random_seed
+    curModel = LANGUAGE + "_" + TRAIN_AMOUNT + "_" + modelName + "_" + random_seed
     trainModelSP( testFunc, curModel, hypers )
     
     # pos tags
@@ -560,11 +561,11 @@ hypers['use_capitalization_info'] = False
 
 start_time_caps_1 = time.time()
 # use glove, no learn
-print("\n\nGlove Embeddings")
+print("\n\nCaps No Learn")
 hypers['use_glove'] = True
 hypers['allow_glove_retrain'] = False
 hypers['embed_dropout'] = 0.0
-testFeatures( testFunc, "glove_nolearn", hypers)
+testFeatures( testFunc, "caps_nolearn", hypers)
 
 end_time_caps_1 = time.time()
 
@@ -580,11 +581,11 @@ print("--- %s seconds ---" % (end_time_caps_1 - start_time_caps_1))
 
 start_time_caps_2 = time.time()
 # use glove, learn
-print("\n\nGlove Embeddings with Learning")
+print("\n\nCaps Learn")
 hypers['use_glove'] = True
 hypers['allow_glove_retrain'] = True
 hypers['embed_dropout'] = 0.0
-testFeatures( testFunc, "glove_learn", hypers)
+testFeatures( testFunc, "caps_learn", hypers)
 
 end_time_caps_2 = time.time()
 
@@ -628,11 +629,11 @@ hypers['use_capitalization_info'] = False
 
 start_time_cnn_1 = time.time()
 # # use glove, no learn
-print("\n\nGlove Embeddings")
+print("\n\nCNN No Learn")
 hypers['use_glove'] = True
 hypers['allow_glove_retrain'] = False
 hypers['embed_dropout'] = 0.0
-testFeatures( testFunc, "glove_nolearn_cnn", hypers)
+testFeatures( testFunc, "cnn_nolearn", hypers)
 
 end_time_cnn_1 = time.time()
 
@@ -648,11 +649,11 @@ print("--- %s seconds ---" % (end_time_cnn_1 - start_time_cnn_1))
 
 start_time_cnn_2 = time.time()
 # use glove, learn
-print("\n\nGlove Embeddings with Learning")
+print("\n\nCNN Learn")
 hypers['use_glove'] = True
 hypers['allow_glove_retrain'] = True
 hypers['embed_dropout'] = 0.0
-testFeatures( testFunc, "glove_learn_cnn", hypers)
+testFeatures( testFunc, "cnn_learn", hypers)
 
 end_time_cnn_2 = time.time()
 

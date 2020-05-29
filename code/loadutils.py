@@ -2,29 +2,32 @@ import numpy as np
 import time
 from importlib import reload
 import glove_helper
+import os
 # capsule layers from Xifeng Guo 
 # https://github.com/XifengGuo/CapsNet-Keras
 from capsulelayers import CapsuleLayer, PrimaryCap1D, Length, Mask
 from keras.models import model_from_json
 from common import vocabulary, utils
 
+DIRECTORY = "FIXME"
+
 # a dict of all processed data filenames
-TRAIN_DATA_FILES = { 'trainX' : 'trainX.npy',
-                     'trainY' : 'trainY.npy',
-                     'devX' : 'devX.npy',
-                     'devY' : 'devY.npy',
-                     'trainX_pos' : 'trainX_pos.npy',
-                     'trainX_capitals' : 'trainX_capitals.npy',
-                     'devX_pos' : 'devX_pos.npy',
-                     'devX_capitals' : 'devX_capitals.npy',
-                     'glove_embed' : 'glove_embed.npy',
-                     'train_decoderY' : 'train_deocoderY.npy',
-                     'dev_decoderY' : 'dev_decoderY.npy'}
+TRAIN_DATA_FILES = { 'trainX' : DIRECTORY+'/trainX.npy',
+                     'trainY' : DIRECTORY+'/trainY.npy',
+                     'devX' : DIRECTORY+'/devX.npy',
+                     'devY' : DIRECTORY+'/devY.npy',
+                     'trainX_pos' : DIRECTORY+'/trainX_pos.npy',
+                     'trainX_capitals' : DIRECTORY+'/trainX_capitals.npy',
+                     'devX_pos' : DIRECTORY+'/devX_pos.npy',
+                     'devX_capitals' : DIRECTORY+'/devX_capitals.npy',
+                     'glove_embed' : DIRECTORY+'/glove_embed.npy',
+                     'train_decoderY' : DIRECTORY+'/train_deocoderY.npy',
+                     'dev_decoderY' : DIRECTORY+'/dev_decoderY.npy'}
 
 
-DEV_RESULT_FILES = { 'raw_y_pred' : 'raw_y_pred.npy',
-                     'raw_y_pred_decoder_embeddings' : 'raw_y_pred_decoder_embeddings.npy',
-                     'y_pred' : 'y_pred.npy'}
+DEV_RESULT_FILES = { 'raw_y_pred' : DIRECTORY+'/raw_y_pred.npy',
+                     'raw_y_pred_decoder_embeddings' : DIRECTORY+'/raw_y_pred_decoder_embeddings.npy',
+                     'y_pred' : DIRECTORY+'/y_pred.npy'}
 
 
 # timeit decorator
@@ -73,19 +76,22 @@ def loadDevPredictionsData(modelName, modelsDir='dev_Predictions'):
     except:
         raw_y_pred_decoder_embeddings = np.empty(0)        
     y_pred = np.load(path + DEV_RESULT_FILES['y_pred'])
-    
+
     if y_pred.dtype == '<U15':
         raw_y_pred_decoder_embeddings = np.empty(0)
         y_pred = np.argmax(raw_y_pred, axis=1) + 3
-    
-    return raw_y_pred, raw_y_pred_decoder_embeddings, y_pred
-    
 
-def saveProcessedData( trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat,
-                       devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY):
+    return raw_y_pred, raw_y_pred_decoder_embeddings, y_pred
+
+
+def saveProcessedData( trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat, devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY, saveDirectory):
     """
     Save all processed training data
     """
+    DIRECTORY = saveDirectory
+    if not os.path.exists(DIRECTORY):
+        os.makedirs(DIRECTORY)
+
     np.save(TRAIN_DATA_FILES['trainX'], trainX)
     np.save(TRAIN_DATA_FILES['trainX_capitals'], trainX_capitals_cat)
     np.save(TRAIN_DATA_FILES['trainX_pos'], trainX_pos_cat)
@@ -99,14 +105,17 @@ def saveProcessedData( trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_c
     np.save(TRAIN_DATA_FILES['dev_decoderY'], dev_decoderY)
 
 
-def loadProcessedData( ):
+def loadProcessedData(saveDirectory):
     """
     Load all processed training data
-    
+
     returns:
     trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat,
     devX_pos_cat, trainY_cat, devT_cat, embedding_matrix
     """
+
+    DIRECTORY = saveDirectory
+
     trainX = np.load(TRAIN_DATA_FILES['trainX'])
     trainX_capitals_cat = np.load(TRAIN_DATA_FILES['trainX_capitals'])
     trainX_pos_cat = np.load(TRAIN_DATA_FILES['trainX_pos'])
@@ -118,7 +127,7 @@ def loadProcessedData( ):
     embedding_matrix = np.load(TRAIN_DATA_FILES['glove_embed'])
     train_decoderY = np.load(TRAIN_DATA_FILES['train_decoderY'])
     dev_decoderY = np.load(TRAIN_DATA_FILES['dev_decoderY'])    
-    
+
     return trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat, \
            devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY
 
