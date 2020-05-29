@@ -12,22 +12,22 @@ from common import vocabulary, utils
 DIRECTORY = "/home/u26/zupon/FIXME"
 
 # a dict of all processed data filenames
-TRAIN_DATA_FILES = { 'trainX' : DIRECTORY+'/trainX.npy',
-                     'trainY' : DIRECTORY+'/trainY.npy',
-                     'devX' : DIRECTORY+'/devX.npy',
-                     'devY' : DIRECTORY+'/devY.npy',
-                     'trainX_pos' : DIRECTORY+'/trainX_pos.npy',
-                     'trainX_capitals' : DIRECTORY+'/trainX_capitals.npy',
-                     'devX_pos' : DIRECTORY+'/devX_pos.npy',
-                     'devX_capitals' : DIRECTORY+'/devX_capitals.npy',
-                     'glove_embed' : DIRECTORY+'/glove_embed.npy',
-                     'train_decoderY' : DIRECTORY+'/train_deocoderY.npy',
-                     'dev_decoderY' : DIRECTORY+'/dev_decoderY.npy'}
+TRAIN_DATA_FILES = { 'trainX' : 'trainX.npy',
+                     'trainY' : 'trainY.npy',
+                     'devX' : 'devX.npy',
+                     'devY' : 'devY.npy',
+                     'trainX_pos' : 'trainX_pos.npy',
+                     'trainX_capitals' : 'trainX_capitals.npy',
+                     'devX_pos' : 'devX_pos.npy',
+                     'devX_capitals' : 'devX_capitals.npy',
+                     'glove_embed' : 'glove_embed.npy',
+                     'train_decoderY' : 'train_deocoderY.npy',
+                     'dev_decoderY' : 'dev_decoderY.npy'}
 
 
-DEV_RESULT_FILES = { 'raw_y_pred' : DIRECTORY+'/raw_y_pred.npy',
-                     'raw_y_pred_decoder_embeddings' : DIRECTORY+'/raw_y_pred_decoder_embeddings.npy',
-                     'y_pred' : DIRECTORY+'/y_pred.npy'}
+DEV_RESULT_FILES = { 'raw_y_pred' : 'raw_y_pred.npy',
+                     'raw_y_pred_decoder_embeddings' : 'raw_y_pred_decoder_embeddings.npy',
+                     'y_pred' : 'y_pred.npy'}
 
 
 # timeit decorator
@@ -92,17 +92,17 @@ def saveProcessedData( trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_c
     if not os.path.exists(DIRECTORY):
         os.makedirs(DIRECTORY)
 
-    np.save(TRAIN_DATA_FILES['trainX'], trainX)
-    np.save(TRAIN_DATA_FILES['trainX_capitals'], trainX_capitals_cat)
-    np.save(TRAIN_DATA_FILES['trainX_pos'], trainX_pos_cat)
-    np.save(TRAIN_DATA_FILES['devX'], devX)
-    np.save(TRAIN_DATA_FILES['devX_capitals'], devX_capitals_cat)
-    np.save(TRAIN_DATA_FILES['devX_pos'], devX_pos_cat)
-    np.save(TRAIN_DATA_FILES['trainY'], trainY_cat)
-    np.save(TRAIN_DATA_FILES['devY'], devY_cat)
-    np.save(TRAIN_DATA_FILES['glove_embed'], embedding_matrix)
-    np.save(TRAIN_DATA_FILES['train_decoderY'], train_decoderY)
-    np.save(TRAIN_DATA_FILES['dev_decoderY'], dev_decoderY)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX']), trainX)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX_capitals']), trainX_capitals_cat)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX_pos']), trainX_pos_cat)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX']), devX)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX_capitals']), devX_capitals_cat)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX_pos']), devX_pos_cat)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainY']), trainY_cat)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devY']), devY_cat)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['glove_embed']), embedding_matrix)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['train_decoderY']), train_decoderY)
+    np.save(os.path.join(DIRECTORY,TRAIN_DATA_FILES['dev_decoderY']), dev_decoderY)
 
 
 def loadProcessedData(saveDirectory):
@@ -116,17 +116,17 @@ def loadProcessedData(saveDirectory):
 
     DIRECTORY = saveDirectory
 
-    trainX = np.load(TRAIN_DATA_FILES['trainX'])
-    trainX_capitals_cat = np.load(TRAIN_DATA_FILES['trainX_capitals'])
-    trainX_pos_cat = np.load(TRAIN_DATA_FILES['trainX_pos'])
-    devX = np.load(TRAIN_DATA_FILES['devX'])
-    devX_capitals_cat = np.load(TRAIN_DATA_FILES['devX_capitals'])
-    devX_pos_cat = np.load(TRAIN_DATA_FILES['devX_pos'])
-    trainY_cat = np.load(TRAIN_DATA_FILES['trainY'])
-    devY_cat = np.load(TRAIN_DATA_FILES['devY'])
-    embedding_matrix = np.load(TRAIN_DATA_FILES['glove_embed'])
-    train_decoderY = np.load(TRAIN_DATA_FILES['train_decoderY'])
-    dev_decoderY = np.load(TRAIN_DATA_FILES['dev_decoderY'])    
+    trainX = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX']))
+    trainX_capitals_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX_capitals']))
+    trainX_pos_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainX_pos']))
+    devX = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX']))
+    devX_capitals_cat = np.load(os.path.join(DIRECTORY,['devX_capitals']))
+    devX_pos_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devX_pos']))
+    trainY_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['trainY']))
+    devY_cat = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['devY']))
+    embedding_matrix = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['glove_embed']))
+    train_decoderY = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['train_decoderY']))
+    dev_decoderY = np.load(os.path.join(DIRECTORY,TRAIN_DATA_FILES['dev_decoderY']))
 
     return trainX, trainX_capitals_cat, trainX_pos_cat, devX, devX_capitals_cat, \
            devX_pos_cat, trainY_cat, devY_cat, embedding_matrix, train_decoderY, dev_decoderY
